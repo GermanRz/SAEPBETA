@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="col-sm-12">
-                    <button class="btn btn-primary btn-sm float-right"data-toggle="modal" data-target="#modalAgregarPrograma"> Agregar Programa</button>
+                    <button class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#modalAgregarPrograma"> Agregar Programa</button>
                 </div>
 
 
@@ -31,7 +31,7 @@
 
                     <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
-                            <thead>
+                            <thead> 
                                 <tr>
                                     <th>Codigo</th>
                                     <th>Descripcion</th>
@@ -44,62 +44,63 @@
                                 <tr>
                                     <td>001</td>
                                     <td>Análisis y Desarrollo de Software</td>
-                                    <td><button class="btn btn-success btn-sm">Activo</button></td>
-                                    <td><button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pencil-alt"></i></button></td>
+                                    <td><button class="btn btn-success btn -sm">Activo</button></td>
+                                    <!-- <td>Activo</td> -->
+                                    <td><button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pen"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td>002</td>
                                     <td>Gestión Administrativa</td>
-                                    <td><button class="btn btn-danger btn-sm">Inactivo</button></td>
-                                    <td><button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pencil-alt"></i></button></td>
+                                    <td>Activo</td>
+                                    <td><button class="btn btn-xs btn-primary"><i class="fas fa-pen"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td>003</td>
                                     <td>Contabilidad y Finanzas</td>
-                                    <td><button class="btn btn-success btn-sm">Activo</button></td>
-                                    <td><button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pencil-alt"></i></button></td>
+                                    <td><button class="btn btn-danger btn -sm">Inactivo</button></td>
+                                    <td><button class="btn btn-xs btn-primary"><i class="fas fa-pen"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td>004</td>
                                     <td>Gestión del Talento Humano</td>
-                                    <td><button class="btn btn-success btn-sm">Activo</button></td>
-                                    <td><button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pencil-alt"></i></button></td>
+                                    <td>Activo</td>
+                                    <td><button class="btn btn-xs btn-primary"><i class="fas fa-pen"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td>005</td>
                                     <td>Diseño e Integración de Multimedia</td>
-                                    <td><button class="btn btn-success btn-sm">Activo</button></td>
-                                    <td><button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pencil-alt"></i></button></td>
+                                    <td>Activo</td>
+                                    <td><button class="btn btn-xs btn-primary"><i class="fas fa-pen"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td>006</td>
                                     <td>Desarrollo de Videojuegos</td>
-                                    <td><button class="btn btn-success btn-sm">Activo</button></td>
-                                    <td><button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pencil-alt"></i></button></td>
+                                    <td>Inactivo</td>
+                                    <td><button class="btn btn-xs btn-primary"><i class="fas fa-pen"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td>007</td>
                                     <td>Producción Multimedia</td>
-                                    <td><button class="btn btn-success btn-sm">Activo</button></td>
-                                    <td><button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pencil-alt"></i></button></td>
+                                    <td>Activo</td>
+                                    <td><button class="btn btn-xs btn-primary"><i class="fas fa-pen"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td>008</td>
                                     <td>Mecánica Industrial</td>
-                                    <td><button class="btn btn-success btn-sm">Activo</button></td>
-                                    <td><button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pencil-alt"></i></button></td>
+                                    <td>Activo</td>
+                                    <td><button class="btn btn-xs btn-primary"><i class="fas fa-pen"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td>009</td>
                                     <td>Gestión de Redes de Datos</td>
-                                    <td><button class="btn btn-success btn-sm">Activo</button></td>
-                                    <td><button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pencil-alt"></i></button></td>
+                                    <td>Inactivo</td>
+                                    <td><button class="btn btn-xs btn-primary"><i class="fas fa-pen"></i></button></td>
                                 </tr>
                                 <tr>
                                     <td>010</td>
                                     <td>Instalaciones Eléctricas</td>
-                                    <td><button class="btn btn-success btn-sm">Activo</button></td>
-                                    <td><button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pencil-alt"></i></button></td>
+                                    <td>Activo</td>
+                                    <td><button class="btn btn-xs btn-primary"><i class="fas fa-pen"></i></button></td>
                                 </tr>
                                 <!-- 
                                 <?php for ($i = 1; $i <= 50; $i++): ?>
@@ -115,9 +116,16 @@
                                     </tr>
                                 <?php endfor; ?> -->
 
+
+
                             </tbody>
                         </table>
                     </div>
+
+
+
+
+
 
                 </div>
             </div>
@@ -126,11 +134,15 @@
 
 </div>
 
-<!-- ==========
- modal agregar programa
- =============== -->
 
- <div class="modal fade" id="modalAgregarPrograma">
+
+<!-- =====================================================================
+
+MODAL AGREGAR Programa
+
+====================================================================== -->
+
+<div class="modal fade" id="modalAgregarPrograma">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -139,49 +151,55 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            
+
             <form action="" method="POST">
-             <div class="modal-body">
-                <label for="descripcionPrograma">Descripción</label>
-                <input type="text" class="form-control" name="descripcionPrograma" required>  
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn btn-primary">Guardar</button>
-            </div>
-        </form>
+                <div class="modal-body">
+                    <label for = "descripcionprograma">Descripción</label>
+                    <input type="text" class="form-control" name="descripcionPrograma"required>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
           </div>
           <!-- /.modal-content -->
-          </div>
+        </div>
         <!-- /.modal-dialog -->
       </div>
+      <!-- /.modal -->
 
-    <!-- ==========
- modal editar programa
- =============== -->
+      
 
- <div class="modal fade" id="modalEditarPrograma">
+<!-- =====================================================================
+
+MODAL EDITAR Programa
+
+====================================================================== -->
+
+<div class="modal fade" id="modalEditarPrograma">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Agregar programa de formación</h4>
+              <h4 class="modal-title">Editar programa de formación</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            
+
             <form action="" method="POST">
-             <div class="modal-body">
-                <label for="descripcionPrograma">Descripción</label>
-                <input type="text" class="form-control" name="descripcionPrograma" required>  
-            </div>
-            <div class="modal-footer justify-content-between">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-              <button type="button" class="btn btn-primary">Guardar</button>
-            </div>
-        </form>
+                <div class="modal-body">
+                    <label for = "descripcionprograma">Descripción</label>
+                    <input type="text" class="form-control" name="descripcionPrograma"required>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
           </div>
           <!-- /.modal-content -->
-          </div>
+        </div>
         <!-- /.modal-dialog -->
-      </div>  
+      </div>
+      <!-- /.modal -->
