@@ -52,9 +52,9 @@
                                     echo '<td>' . $value["nombre_programa"] . '</td>';
                                     echo '<td>' . $value["version_programa"] . '</td>';
                                     if ($value["estado"] == "Activo") {
-                                        echo  '<td><button class="btn btn-success btn-sm">Activo</button></td>';
+                                        echo  '<td><button class="btn btn-success btn-sm btnActivarPrograma" idProgramaCambiarEstado="'.$value["ID_programas"].'"  nuevoEstadoprograma="Inactivo">Activo</button></td>';
                                     } else {
-                                        echo  '<td><button class="btn btn-danger btn-sm">Inactivo</button></td>';
+                                        echo  '<td><button class="btn btn-danger btn-sm btnActivarPrograma" idProgramaCambiarEstado="'.$value["ID_programas"].'"  nuevoEstadoprograma="Activo">Inactivo</button></td>';
                                     }
                                     echo '<td><button class="btn btn-xs btn-primary btnEditarPrograma" idprograma="' . $value["ID_programas"] . '" data-toggle="modal" data-target="#modalEditarPrograma"><i class="fas fa-pencil-alt"></i></button></td>';
                                     echo '</tr>';

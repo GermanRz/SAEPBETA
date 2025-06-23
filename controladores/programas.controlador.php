@@ -84,6 +84,16 @@
             }//fin isset
 
         }//fin metodo
+
+
+        static public function ctrCambiarEstadoPrograma($valor, $estado){
+
+            $respuesta = ModeloProgramas::mdlCambiarEstadoPrograma($valor, $estado);
+            return $respuesta;
+
+        }//fin metodo ctrCambiarEstadoPrograma
+
+
     }//fin clase
 
 

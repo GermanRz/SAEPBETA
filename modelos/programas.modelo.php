@@ -63,6 +63,24 @@
 
         }//fin metodo
 
+        static public function mdlCambiarEstadoPrograma($valor, $estado){
+
+            // UPDATE programas SET estado = $estado WHERE ID_programas = $valor
+            $stmt = Conexion::conectar()->prepare("UPDATE programas SET estado = :estado WHERE ID_programas = :id_programa");
+
+            $stmt->bindParam(":id_programa", $valor, PDO::PARAM_INT);
+            $stmt->bindParam(":estado", $estado, PDO::PARAM_STR);
+
+            if ($stmt->execute()){
+                return "ok";
+            }else{
+                return "error";
+            }
+            $stmt->closeCursor();
+            $stmt = null;
+
+        }//fin metodo mdlCambiarEstadoPrograma
+
 
 
     }
