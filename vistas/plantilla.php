@@ -93,7 +93,10 @@ session_start();
         $_GET["ruta"] == "roles" ||
         $_GET["ruta"] == "sedes" ||
         $_GET["ruta"] == "seguimiento" ||
-        $_GET["ruta"] == "usuarios" ||
+        $_GET["ruta"] == "verAprendices" ||
+        $_GET["ruta"] == "verEvaluadores" ||
+        $_GET["ruta"] == "verCoevaluadores" ||
+        $_GET["ruta"] == "verAuxiliares" ||
         $_GET["ruta"] == "salir"
       ) {
         include "modulos/" . $_GET["ruta"] . ".php";

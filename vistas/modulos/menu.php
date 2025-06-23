@@ -138,21 +138,35 @@ aside.main-sidebar .brand-text {
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
+          <ul class="nav nav-treeview">
 
             <li class="nav-item">
-                <a href="perfil" class="nav-link">
+                <a href="verAprendices" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Perfil</p>
+                  <p>Ver aprendices</p>
                 </a>
-              </li> 
+            </li> 
 
-              <li class="nav-item">
-                <a href="usuarios" class="nav-link">
+            <li class="nav-item">
+              <a href="verEvaluadores" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ver evaluadores</p>
+              </a>
+            </li>   
+              
+            <li class="nav-item">
+                <a href="verCoevaluadores" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Usuarios</p>
+                  <p>Ver coevaluadores</p>
                 </a>
-              </li>               
+            </li> 
+
+            <li class="nav-item">
+              <a href="verAuxiliares" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Ver auxiliares</p>
+              </a>
+            </li>    
 
 
 
