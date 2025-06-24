@@ -160,14 +160,29 @@ aside.main-sidebar .brand-text {
 
 
           <li class="nav-item">
-            <a href="empresas" class="nav-link">
-              <i class="nav-icon fas fa-industry"></i>
-              <p>
-                Empresas
-              </p>
-            </a>
-          </li>
-
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-tachometer-alt"></i>
+        <p>
+          Empresas
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="empresas" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Empresas</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="administrar" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Administrar</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+   
 
           <li class="nav-item">
             <a href="asignarinstructor" class="nav-link">

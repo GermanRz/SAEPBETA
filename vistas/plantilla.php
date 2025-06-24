@@ -84,6 +84,7 @@ session_start();
         $_GET["ruta"] == "programas" ||
         $_GET["ruta"] == "asignarinstructor" ||
         $_GET["ruta"] == "empresas" ||
+        $_GET["ruta"] == "administrar" ||
         $_GET["ruta"] == "fichas" ||
         $_GET["ruta"] == "modalidades" ||
         $_GET["ruta"] == "modulos" ||
