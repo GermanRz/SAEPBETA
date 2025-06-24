@@ -94,6 +94,8 @@ class ControladorUsuarios{
                             }
                         });
                     </script>';
+
+                    return "ok";
                 } else {
                     echo '<script>
                         swal({
@@ -107,6 +109,8 @@ class ControladorUsuarios{
                             }
                         });
                     </script>';
+                    return "error";
+
                 }
             } else {
                 echo '<script>
@@ -121,8 +125,10 @@ class ControladorUsuarios{
                         }
                     });
                 </script>';
+                return "error";
             }
         }
+        return null;
     }
 
 
