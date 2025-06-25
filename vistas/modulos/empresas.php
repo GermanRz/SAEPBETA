@@ -52,16 +52,16 @@
                                             <select class="form-control" name="coevaluador" required>
                                                 <option value="">Seleccione un coevaluador</option>
                                                 <?php
-                                                $conn = new mysqli("localhost", "root", "", "saep");
-                                                if ($conn->connect_error) {
-                                                    die("Conexión fallida: " . $conn->connect_error);
-                                                }
-                                                $sql = "SELECT ID_usuarios, nombres, apellidos FROM usuarios WHERE ID_rol = 3 AND estado = 'Activo'";
-                                                $result = $conn->query($sql);
-                                                while ($row = $result->fetch_assoc()) {
-                                                    echo '<option value="'.$row['ID_usuarios'].'">'.$row['nombres'].' '.$row['apellidos'].'</option>';
-                                                }
-                                                $conn->close();
+                                                    $conn = new mysqli("localhost", "root", "", "saep");
+                                                    if ($conn->connect_error) {
+                                                        die("Conexión fallida: " . $conn->connect_error);
+                                                    }
+                                                    $sql = "SELECT ID_usuarios, nombres, apellidos FROM usuarios WHERE ID_rol = 3 AND estado = 'Activo'";
+                                                    $result = $conn->query($sql);
+                                                    while ($row = $result->fetch_assoc()) {
+                                                        echo '<option value="'.$row['ID_usuarios'].'">'.$row['nombres'].' '.$row['apellidos'].'</option>';
+                                                    }
+                                                    $conn->close();
                                                 ?>
                                             </select>
                                         </div>
@@ -78,12 +78,84 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="departamento">Departamento</label>
-                                            <input type="text" class="form-control" name="departamento" required>
+                                            <select class="form-control" name="departamento" id="departamento" required>
+                                                <option value="">Seleccione un departamento</option>
+                                                <option value="Antioquia">Antioquia</option>
+                                                <option value="Atlántico">Atlántico</option>
+                                                <option value="Bogotá D.C.">Bogotá D.C.</option>
+                                                <option value="Bolívar">Bolívar</option>
+                                                <option value="Boyacá">Boyacá</option>
+                                                <option value="Caldas">Caldas</option>
+                                                <option value="Cauca">Cauca</option>
+                                                <option value="Cesar">Cesar</option>
+                                                <option value="Córdoba">Córdoba</option>
+                                                <option value="Cundinamarca">Cundinamarca</option>
+                                                <option value="Huila">Huila</option>
+                                                <option value="La Guajira">La Guajira</option>
+                                                <option value="Magdalena">Magdalena</option>
+                                                <option value="Meta">Meta</option>
+                                                <option value="Nariño">Nariño</option>
+                                                <option value="Norte de Santander">Norte de Santander</option>
+                                                <option value="Quindío">Quindío</option>
+                                                <option value="Risaralda">Risaralda</option>
+                                                <option value="Santander">Santander</option>
+                                                <option value="Sucre">Sucre</option>
+                                                <option value="Tolima">Tolima</option>
+                                                <option value="Valle del Cauca">Valle del Cauca</option>
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="ciudad">Ciudad</label>
-                                            <input type="text" class="form-control" name="ciudad" required>
+                                            <select class="form-control" name="ciudad" id="ciudad" required>
+                                                <option value="">Seleccione una ciudad</option>
+                                            </select>
                                         </div>
+                                        <script>
+                                            const ciudadesPorDepartamento = {
+                                                "Antioquia": ["Medellín", "Bello", "Itagüí", "Envigado", "Rionegro"],
+                                                "Atlántico": ["Barranquilla", "Soledad", "Malambo", "Puerto Colombia"],
+                                                "Bogotá D.C.": ["Bogotá"],
+                                                "Bolívar": ["Cartagena", "Magangué", "Turbaco"],
+                                                "Boyacá": ["Tunja", "Duitama", "Sogamoso"],
+                                                "Caldas": ["Manizales", "Villamaría", "Chinchiná"],
+                                                "Cauca": ["Popayán", "Santander de Quilichao"],
+                                                "Cesar": ["Valledupar", "Aguachica"],
+                                                "Córdoba": ["Montería", "Lorica"],
+                                                "Cundinamarca": ["Soacha", "Girardot", "Zipaquirá"],
+                                                "Huila": ["Neiva", "Pitalito"],
+                                                "La Guajira": ["Riohacha", "Maicao"],
+                                                "Magdalena": ["Santa Marta", "Ciénaga"],
+                                                "Meta": ["Villavicencio", "Acacías"],
+                                                "Nariño": ["Pasto", "Ipiales"],
+                                                "Norte de Santander": ["Cúcuta", "Ocaña"],
+                                                "Quindío": ["Armenia", "Calarcá"],
+                                                "Risaralda": ["Pereira", "Dosquebradas"],
+                                                "Santander": ["Bucaramanga", "Floridablanca", "Girón"],
+                                                "Sucre": ["Sincelejo", "Corozal"],
+                                                "Tolima": ["Ibagué", "Espinal"],
+                                                "Valle del Cauca": ["Cali", "Palmira", "Buenaventura"]
+                                            };
+
+                                            document.getElementById('departamento').addEventListener('change', function() {
+                                                const depto = this.value;
+                                                const ciudadSelect = document.getElementById('ciudad');
+                                                ciudadSelect.innerHTML = '<option value="">Seleccione una ciudad</option>';
+                                                if (ciudadesPorDepartamento[depto]) {
+                                                    ciudadesPorDepartamento[depto].forEach(function(ciudad) {
+                                                        const option = document.createElement('option');
+                                                        option.value = ciudad;
+                                                        option.text = ciudad;
+                                                        ciudadSelect.appendChild(option);
+                                                    });
+
+                                                    // Preseleccionar ciudad si existe en atributo data-ciudad
+                                                    const ciudadPreseleccionada = ciudadSelect.getAttribute('data-ciudad');
+                                                    if (ciudadPreseleccionada) {
+                                                        ciudadSelect.value = ciudadPreseleccionada;
+                                                    }
+                                                }
+                                            });
+                                        </script>
                                         <div class="form-group">
                                             <label for="estado">Estado</label>
                                             <select class="form-control" name="estado" required>
@@ -102,9 +174,9 @@
 
                             <!-- Lógica del Controlador -->
                             <?php
-                            require_once $_SERVER["DOCUMENT_ROOT"].'/SAEPBETA/controladores/empresas.controlador.php';
-                            $crearEmpresa = new ControladorEmpresas();
-                            $crearEmpresa->ctrCrearEmpresa();
+                                require_once $_SERVER["DOCUMENT_ROOT"].'/SAEPBETA/controladores/empresas.controlador.php';
+                                $crearEmpresa = new ControladorEmpresas();
+                                $crearEmpresa->ctrCrearEmpresa();
                             ?>
                         </form>
                     </div>
