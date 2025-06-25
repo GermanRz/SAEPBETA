@@ -1,71 +1,49 @@
 <?php
 
-    require_once "conexion.php";
+require_once "conexion.php";
 
-    class ModeloVerUsuarios{
+class ModeloVerUsuarios {
 
-        static public function mdlMostrarVerUsuarios($dato){
-
-            if($dato == null){
-                $stmt = Conexion::conectar()->prepare("SELECT ID_usuarios, tipo_dc, numero, nombres, apellidos,
-                                          email, direccion, contacto1, estado, ID_rol FROM programas");
-        
-                $stmt-> execute();
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            }#else{
-                #$stmt = Conexion::conectar()->prepare("SELECT * FROM programas WHERE ID_programas = :id_programa");
-                #$stmt->bindParam(":id_programa", $dato, PDO::PARAM_INT);
-        
-                #$stmt-> execute();
-                #return $stmt->fetch();                
-
-            #}
-            
-    
-            $stmt->close();
-            $stmt = null;
-
-        }//fin de la funcion mdlMostrarProgramas
-
-        static public function mdlIngresarPrograma($tabla, $datos){
-            try {
-                $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(nombre_programa, version_programa) VALUES (:nombre_programa, :version_programa)");
-                $stmt->bindParam(":nombre_programa", $datos["nombre_programa"], PDO::PARAM_STR);
-                $stmt->bindParam(":version_programa", $datos["version_programa"], PDO::PARAM_STR);
-                if($stmt->execute()){
-                    return "ok";
-                }else{
-                    return "error";
-                }
-            }catch (Exception $e) {
-                return $e->getMessage();
-            }finally{
-                $stmt -> closeCursor();
-                $stmt = null;
-            }
+    static public function mdlMostrarUsuariosPorTipo($tipo) {
+        if ($tipo !== null) {
+            $stmt = Conexion::conectar()->prepare("
+                SELECT u.ID_usuarios, u.tipo_dc, u.numero, u.nombres, u.apellidos,
+                    u.email, u.email_insti, u.direccion, u.contacto1, u.estado,
+                    r.rol AS nombre_rol
+                FROM usuarios u
+                INNER JOIN rol r ON u.ID_rol = r.ID_rol
+                WHERE u.ID_rol = :tipo
+            ");
+            $stmt->bindParam(":tipo", $tipo, PDO::PARAM_INT);
+        } else {
+            $stmt = Conexion::conectar()->prepare("
+                SELECT u.ID_usuarios, u.tipo_dc, u.numero, u.nombres, u.apellidos,
+                    u.email, u.email_insti, u.direccion, u.contacto1, u.estado,
+                    r.rol AS nombre_rol
+                FROM usuarios u
+                INNER JOIN rol r ON u.ID_rol = r.ID_rol
+            ");
         }
 
-        static public function mdlEditarprograma($datos){
-
-                $stmt = Conexion::conectar()->prepare("UPDATE programas SET nombre_programa = :nombrePrograma, version_programa = :versionPrograma WHERE ID_programas = :idprograma");
-
-                $stmt->bindParam(":nombrePrograma", $datos["descripcion_programa"], PDO::PARAM_STR);
-                $stmt->bindParam(":versionPrograma", $datos["version_programa"], PDO::PARAM_STR);
-                $stmt->bindParam(":idprograma", $datos["id_programa"], PDO::PARAM_INT);
-
-                if ($stmt->execute()){
-                    return "ok";
-                }else{
-                    return "error";
-                }
-
-                $stmt->close();
-                $stmt = null;    
-
-        }//fin metodo
-
-
-
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+        return $resultado;
     }
 
-?>
+    static public function mdlActualizarEstadoUsuario($id, $estado) {
+        $stmt = Conexion::conectar()->prepare("UPDATE usuarios SET estado = :estado WHERE ID_usuarios = :id");
+        $stmt->bindParam(":estado", $estado, PDO::PARAM_STR);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return "ok";
+        } else {
+            return "error";
+        }
+
+        $stmt->close();
+        $stmt = null;
+    }
+
+}

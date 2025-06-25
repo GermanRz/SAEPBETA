@@ -141,32 +141,33 @@ aside.main-sidebar .brand-text {
           <ul class="nav nav-treeview">
 
             <li class="nav-item">
-                <a href="verAprendices" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Ver aprendices</p>
-                </a>
-            </li> 
+              <a href="index.php?ruta=usuariosRegistrados&tipo=1" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Aprendices</p>
+              </a>
+            </li>
 
             <li class="nav-item">
-              <a href="verEvaluadores" class="nav-link">
+              <a href="index.php?ruta=usuariosRegistrados&tipo=2" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Ver evaluadores</p>
+                <p>Evaluadores</p>
               </a>
-            </li>   
-              
-            <li class="nav-item">
-                <a href="verCoevaluadores" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Ver coevaluadores</p>
-                </a>
-            </li> 
+            </li>
 
             <li class="nav-item">
-              <a href="verAuxiliares" class="nav-link">
+              <a href="index.php?ruta=usuariosRegistrados&tipo=3" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Ver auxiliares</p>
+                <p>Coevaluadores</p>
               </a>
-            </li>    
+            </li>
+
+            <li class="nav-item">
+              <a href="index.php?ruta=usuariosRegistrados&tipo=4" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Auxiliares</p>
+              </a>
+            </li>
+
 
 
 
