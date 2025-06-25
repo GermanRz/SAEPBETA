@@ -12,22 +12,79 @@ class ControladorUsuarios{
                     $valor = $_POST["ingEmail"];
 
                     $respuesta=ModeloUsuarios::mdlMostrarUsuarios($tabla, $item, $valor);
-                    var_dump($respuesta);
+                    //var_dump($respuesta);
                     
-                    if ($respuesta["email"] == $_POST["ingEmail"] && $respuesta["clave"]==$_POST["ingPassword"] && $respuesta["estado"]=="Activo"){
-                        
-                        $_SESSION["iniciarSesion"] = "ok";
-                        $_SESSION["idUsuario"]=$respuesta["ID_usuarios"];
-                        $_SESSION["nombres"]=$respuesta["nombres"];
-                        $_SESSION["apellidos"]=$respuesta["apellidos"];
-                        $_SESSION["idRol"]=$respuesta["ID_rol"];
-                        
+                     if ($respuesta && $respuesta["clave"] == $_POST["ingPassword"]) {
+                        if ($respuesta["estado"] == "Activo") {
+                          
+                            if (session_status() == PHP_SESSION_NONE) {
+                                session_start();
+                            }  
+                            $_SESSION["iniciarSesion"] = "ok";
+                            $_SESSION["idUsuario"]=$respuesta["ID_usuarios"];
+                            $_SESSION["nombres"]=$respuesta["nombres"];
+                            $_SESSION["apellidos"]=$respuesta["apellidos"];
+                            $_SESSION["idRol"]=$respuesta["ID_rol"];
+                            $_SESSION["email"] = $respuesta["email"]; 
                        
-                        echo '<script>window.location = "inicio";</script>';
+                            $nombreRol = "";
+                            switch($respuesta["ID_rol"]) {
+                            case 1: 
+                            $nombreRol = "aprendiz";
+                            break;
+                            case 2:
+                            $nombreRol = "instructor";
+                            break;
 
+                            default:
+                            $nombreRol = "usuario";
+                            }
+                            $_SESSION["rol"] = $nombreRol;
+                       
+                            if ($_SESSION["idRol"] == 1) {
+                         
+                                $progreso = ModeloUsuarios::mdlObtenerProgresoAprendiz($_SESSION["idUsuario"]);
+                                
+                                $_SESSION["progreso"] = $progreso["porcentaje_completado"];
+                                $_SESSION["fecha_inicio"] = date("d/m/Y", strtotime($progreso["fecha_inicio"]));
+                                $_SESSION["fecha_fin"] = date("d/m/Y", strtotime($progreso["fecha_fin"]));
+                                $_SESSION["programa"] = $progreso["nombre_programa"];
+                                $_SESSION["sede"] = $progreso["nombre_sede"];
+                                $_SESSION["modalidad"] = $progreso["modalidad_formacion"];
+                                
+                     
+                                $_SESSION["novedades"] = ModeloUsuarios::mdlObtenerNovedadesAprendiz($_SESSION["idUsuario"]);
+                            }
+                            echo '<script>window.location = "inicio";</script>';
+                        }else {
+                            echo '<script>
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Cuenta inactiva",
+                                    text: "Por favor contacta al administrador"
+                                });
+                            </script>';
+                            }
+                    } else {
+                        echo '<script>
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: "Usuario o contraseña incorrectos"
+                            });
+                        </script>';
                     }
 
                 }//fn del pregmatch
+                 else {
+                echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error de formato",
+                        text: "El email o la contraseña no cumplen el formato requerido."
+                    });
+                </script>';
+            }
 
         }
 
