@@ -37,7 +37,7 @@
         </li>
         <!-- Menu Footer-->
         <li class="user-footer">
-          <a href="#" class="btn btn-default btn-flat">Perfil</a>
+          <a href="editarperfil" class="btn btn-default btn-flat">Perfil</a>
           <a href="salir" class="btn btn-default btn-flat float-right">Cerrar sesión</a>
         </li>
       </ul>
