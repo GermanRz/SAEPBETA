@@ -98,6 +98,7 @@ session_start();
         $_GET["ruta"] == "roles" ||
         $_GET["ruta"] == "sedes" ||
         $_GET["ruta"] == "seguimiento" ||
+        $_GET["ruta"] == "editarperfil" ||
         $_GET["ruta"] == "usuariosRegistrados" ||
         $_GET["ruta"] == "salir"
       ) {
