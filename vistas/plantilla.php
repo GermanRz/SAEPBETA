@@ -53,8 +53,6 @@ session_start();
   <script src="vistas/dist/js/adminlte.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <!-- <script src="vistas/dist/js/demo.js"></script> -->
-  <!-- Toastr CSS -->
-  <link rel="stylesheet" href="vistas/plugins/toastr/toastr.min.css">
 
 
 </head>
@@ -93,7 +91,6 @@ session_start();
         $_GET["ruta"] == "roles" ||
         $_GET["ruta"] == "sedes" ||
         $_GET["ruta"] == "seguimiento" ||
-        $_GET["ruta"] == "usuariosRegistrados" ||
         $_GET["ruta"] == "salir"
       ) {
         include "modulos/" . $_GET["ruta"] . ".php";
@@ -111,7 +108,6 @@ session_start();
 
   <script src="vistas/js/plantilla.js"></script>
   <script src="vistas/js/programas.js"></script>
-  <script src="vistas/js/usuarios.js"></script>
 
 
 </body>
