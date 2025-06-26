@@ -83,9 +83,6 @@ require_once "modelos/asignacion.modelo.php";
                         ?>
                     </tbody>
                 </table>
-                <div class="mt-2">
-                    <input type="text" id="filtroEvaluador" class="form-control" placeholder="Buscar evaluador por nombre o documento...">
-                </div>
             </div>
         </div>
     </div>
