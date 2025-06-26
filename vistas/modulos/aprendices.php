@@ -32,8 +32,8 @@
       <div class="row">
         <div class="col-12">
 
-          <div class="card-body ">
-            <table id="example1" class="table table-bordered table-striped">
+          <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped dt-responsive nowrap">
               <thead>
                 <tr>
                   <th>ID</th>
@@ -77,7 +77,7 @@
                       echo '<td><button class="btn btn-danger btn-sm btnActivarUsuario" idUsuarioCambiarEstado="' . $value["ID_usuarios"] . '" nuevoEstadoUsuario="Activo">Inactivo</button></td>';
                     }
 
-                    // Botón editar (si necesitas agregarlo)
+                    // Botón editar
                     echo '<td><button class="btn btn-xs btn-primary btnEditarAprendiz" idUsuario="' . $value["ID_usuarios"] . '" data-toggle="modal" data-target="#modalEditarAprendiz"><i class="fas fa-pencil-alt"></i></button></td>';
                     echo '</tr>';
                   }
@@ -95,6 +95,7 @@
   </section>
 
 </div>
+
 
 
 <!-- Modal Agregar Aprendiz -->
