@@ -93,6 +93,10 @@ session_start();
         $_GET["ruta"] == "roles" ||
         $_GET["ruta"] == "sedes" ||
         $_GET["ruta"] == "seguimiento" ||
+        $_GET["ruta"] == "aprendices" ||
+        $_GET["ruta"] == "auxiliares" ||
+        $_GET["ruta"] == "evaluadores" ||
+        $_GET["ruta"] == "coevaluadores" ||
         $_GET["ruta"] == "usuarios" ||
         $_GET["ruta"] == "editarperfil" ||
         $_GET["ruta"] == "salir"
@@ -116,6 +120,9 @@ session_start();
   <script src="vistas/js/programas.js"></script>
   <script src="vistas/js/modalidades.js"></script>
   <script src="vistas/js/fichas.js"></script>
+  <script src="vistas/js/sedes.js"></script>
+  
+  
 
 
 </body>

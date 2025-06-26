@@ -40,7 +40,7 @@ $(document).on('click', '.btnEditarFicha', function () {
 // ==============================
 $(document).on('click', '.btnActivarFicha', function () {
     let idFichaActivar = $(this).attr("idFichaCambiarEstado");
-    let nuevoEstado = $(this).attr("nuevoEstadoFicha"); 
+    let nuevoEstado = $(this).attr("nuevoEstado"); 
     let datos = new FormData();
     datos.append("id_cambiarEstado", idFichaActivar);
     datos.append("estadoFicha", nuevoEstado);
@@ -60,9 +60,9 @@ $(document).on('click', '.btnActivarFicha', function () {
     // Cambio visual del botón (inmediato)
     if (nuevoEstado === "Inactiva") {
         $(this).removeClass("btn-success").addClass("btn-danger").html("Inactiva");
-        $(this).attr("nuevoEstadoFicha", "Activa");
+        $(this).attr("nuevoEstado", "Activa");
     } else {
         $(this).removeClass("btn-danger").addClass("btn-success").html("Activa");
-        $(this).attr("nuevoEstadoFicha", "Inactiva");
+        $(this).attr("nuevoEstado", "Inactiva");
     }
 });

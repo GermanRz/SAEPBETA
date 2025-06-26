@@ -9,6 +9,7 @@
         static public function ctrMostrarSedes($valor){
 
             $respuesta = ModeloSedes::mdlMostrarSedes($valor);
+           
             return $respuesta;
             
         }//   fin metodo ctrMostrarProgramas

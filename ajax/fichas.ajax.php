@@ -20,7 +20,7 @@ class AjaxFichas {
     /**
      * Cambiar el estado de una ficha (Activo / Inactivo)
      */
-    public function ajaxCambiarEstadoFicha() {
+    public function ajaxCambiarEstado() {
         $valorId = $this->id_ficha;
         $estado = $this->estado_ficha;
         $respuesta = ControladorFichas::ctrCambiarEstadoFicha($valorId, $estado);
@@ -29,19 +29,19 @@ class AjaxFichas {
 
 } // Fin clase AjaxFichas
 
-
-// Petición AJAX: Cambiar estado de una ficha
-if (isset($_POST["id_cambiarEstado"]) && isset($_POST["estadoFicha"])) {
-    $activarEstado = new AjaxFichas();
-    $activarEstado->id_ficha = $_POST["id_cambiarEstado"];
-    $activarEstado->estado_ficha = $_POST["estadoFicha"];
-    $activarEstado->ajaxCambiarEstadoFicha();
-}
-
 // Petición AJAX: Traer datos de una ficha específica
-elseif (isset($_POST["id_ficha"]) && !isset($_POST["estadoFicha"])) {
+if (isset($_POST["id_ficha"])) {
     $ficha = new AjaxFichas();
     $ficha->id_ficha = $_POST["id_ficha"];
     $ficha->ajaxTraerFicha();
 }
+// Petición AJAX: Cambiar estado de una ficha
+if (isset($_POST["id_cambiarEstado"]) && isset($_POST["estadoFicha"])) {
+    $activarFicha = new AjaxFichas();
+    $activarFicha->id_ficha = $_POST["id_cambiarEstado"];
+    $activarFicha->estado_ficha = $_POST["estadoFicha"];
+    $activarFicha->ajaxCambiarEstado();
+}
+
+
 

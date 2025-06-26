@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-12">
                     
-                    <div class="card-body">
+                    <div class="card-body ">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -74,11 +74,9 @@
                                     if ($value["estado"] == "Activa") {
                                         echo '<td><button class="btn btn-success btn-sm btnActivarFicha" idFichaCambiarEstado="' . $value["ID_Fichas"] . '" nuevoEstado="Inactiva">Activa</button></td>';
                                       } else {
-                                        echo '<td><button class="btn btn-danger btn-sm btnActivarFicha" idFicha="' . $value["ID_Fichas"] . '" nuevoEstado="Activa">Inactiva</button></td>';
+                                        echo '<td><button class="btn btn-danger btn-sm btnActivarFicha" idFichaCambiarEstado="' . $value["ID_Fichas"] . '" nuevoEstado="Activa">Inactiva</button></td>';
                                       }
                                       
-                                    
-
                                     // Botón editar
                                     echo '<td><button class="btn btn-xs btn-primary btnEditarFicha" idFicha="' . $value["ID_Fichas"] . '" data-toggle="modal" data-target="#modalEditarFicha"><i class="fas fa-pencil-alt"></i></button></td>';
                                     echo '</tr>';
@@ -96,117 +94,78 @@
 
 <!-- ========== Modal Agregar Ficha ========== -->
 <div class="modal fade" id="modalAgregarFicha">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
 
             <div class="modal-header">
                 <h4 class="modal-title">Agregar Ficha de Formación</h4>
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
             </div>
 
             <form method="POST">
-                <div class="modal-body row">
+                <div class="modal-body">
 
-                    <!-- Código -->
-                    <div class="form-group col-md-6">
-                        <label for="codigoFicha">Código</label>
-                        <input type="text" class="form-control" name="codigoFicha" required>
-                    </div>
+                    <input type="text" class="form-control" name="codigoFicha" placeholder="Código de Ficha" required>
 
-                    <!-- Programa -->
-                    <div class="form-group col-md-6">
-                        <label for="id_programa">Programa</label>
-                        <select class="form-control" name="id_programa" required>
-                            <option value="">Seleccione un programa</option>
-                            <?php
-                            $programas = ControladorProgramas::ctrMostrarProgramas(null);
-                            foreach ($programas as $programa) {
-                                echo '<option value="'.$programa["id_programa"].'">'.$programa["nombre_programa"].'</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
+                    <select class="form-control mt-2" name="id_programa" required>
+                        <option value="">Seleccione un programa</option>
+                        <?php
+                        $programas = ControladorProgramas::ctrMostrarProgramas(null);
+                        foreach ($programas as $programa) {
+                            echo '<option value="'.$programa["id_programa"].'">'.$programa["nombre_programa"].'</option>';
+                        }
+                        ?>
+                    </select>
+                    
+                    <select class="form-control mt-2" name="id_sede" required>
+                        <option value="">Seleccione una sede</option>
+                        <?php
+                        $sedes = ControladorSedes::ctrMostrarSedes(null);
+                        foreach ($sedes as $sede) {
+                            echo '<option value="'.$sede["id_sede"].'">'.$sede["nombre_sede"].'</option>';
+                        }
+                        ?>
+                    </select>
 
-                    <!-- Sede -->
-                    <div class="form-group col-md-6">
-                        <label for="id_sede">Sede</label>
-                        <select class="form-control" name="id_sede" required>
-                            <option value="">Seleccione una sede</option>
-                            <?php
-                            $sedes = ControladorSedes::ctrMostrarSedes(null);
-                            foreach ($sedes as $sede) {
-                                echo '<option value="'.$sede["id_sede"].'">'.$sede["nombre_sede"].'</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
 
-                    <!-- Modalidad -->
-                    <div class="form-group col-md-6">
-                        <label for="modalidad">Modalidad</label>
-                        <select class="form-control" name="modalidad" required>
-                            <option value="">Seleccione modalidad</option>
-                            <option value="Presencial">Presencial</option>
-                            <option value="Virtual">Virtual</option>
-                        </select>
-                    </div>
 
-                    <!-- Jornada -->
-                    <div class="form-group col-md-6">
-                        <label for="jornada">Jornada</label>
-                        <select class="form-control" name="jornada" required>
-                            <option value="">Seleccione jornada</option>
-                            <option value="Diurna">Diurna</option>
-                            <option value="Mixta">Mixta</option>
-                            <option value="Nocturna">Nocturna</option>
-                        </select>
-                    </div>
+                    <select class="form-control mt-2" name="modalidad" required>
+                        <option value="">Seleccione modalidad</option>
+                        <option value="Presencial">Presencial</option>
+                        <option value="Virtual">Virtual</option>
+                    </select>
 
-                    <!-- Nivel Formación -->
-                    <div class="form-group col-md-6">
-                        <label for="nivel_formacion">Nivel de Formación</label>
-                        <select class="form-control" name="nivel_formacion" required>
-                            <option value="">Seleccione nivel</option>
-                            <option value="Técnico">Técnico</option>
-                            <option value="Tecnólogo">Tecnólogo</option>
-                        </select>
-                    </div>
+                    <select class="form-control mt-2" name="jornada" required>
+                        <option value="">Seleccione jornada</option>
+                        <option value="Diurna">Diurna</option>
+                        <option value="Mixta">Mixta</option>
+                        <option value="Nocturna">Nocturna</option>
+                    </select>
 
-                    <!-- Tipo de Oferta -->
-                    <div class="form-group col-md-6">
-                        <label for="tipo_oferta">Tipo de Oferta</label>
-                        <select class="form-control" name="tipo_oferta" required>
-                            <option value="">Seleccione tipo</option>
-                            <option value="Abierta">Abierta</option>
-                            <option value="Cerrada">Cerrada</option>
-                        </select>
-                    </div>
+                    <select class="form-control mt-2" name="nivel_formacion" required>
+                        <option value="">Seleccione nivel de formación</option>
+                        <option value="Técnico">Técnico</option>
+                        <option value="Tecnólogo">Tecnólogo</option>
+                    </select>
 
-                    <!-- Fecha Inicio -->
-                    <div class="form-group col-md-6">
-                        <label for="fecha_inicio">Fecha Inicio</label>
-                        <input type="date" class="form-control" name="fecha_inicio" required>
-                    </div>
+                    <select class="form-control mt-2" name="tipo_oferta" required>
+                        <option value="">Seleccione tipo de oferta</option>
+                        <option value="Abierta">Abierta</option>
+                        <option value="Cerrada">Cerrada</option>
+                    </select>
 
-                    <!-- Fecha Fin Lectiva -->
-                    <div class="form-group col-md-6">
-                        <label for="fecha_fin_lec">Fecha Fin Lectiva</label>
-                        <input type="date" class="form-control" name="fecha_fin_lec" required>
-                    </div>
+                    <input type="date" class="form-control mt-2" name="fecha_inicio" placeholder="Fecha de Inicio" required>
+                    <input type="date" class="form-control mt-2" name="fecha_fin_lec" placeholder="Fecha Fin Lectiva" required>
+                    <input type="date" class="form-control mt-2" name="fecha_final" placeholder="Fecha Final" required>
 
-                    <!-- Fecha Final -->
-                    <div class="form-group col-md-6">
-                        <label for="fecha_final">Fecha Final</label>
-                        <input type="date" class="form-control" name="fecha_final" required>
-                    </div>
-
-                    <!-- Estado (Oculto y por defecto Activo) -->
                     <input type="hidden" name="estado_ficha" value="Activo">
 
                 </div>
 
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </div>
 
@@ -220,29 +179,90 @@
     </div>
 </div>
 
+
 <!-- ========== Modal Editar Ficha ========== -->
 <div class="modal fade" id="modalEditarFicha">
     <div class="modal-dialog">
         <div class="modal-content">
 
             <div class="modal-header">
-                <h4 class="modal-title">Editar Ficha de formación</h4>
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                <h4 class="modal-title">Editar Ficha de Formación</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
             </div>
 
             <form method="POST">
                 <div class="modal-body">
+
                     <input type="hidden" id="editIdFicha" name="editIdFicha" required>
 
                     <label for="editCodigoFicha">Código</label>
                     <input type="text" class="form-control" id="editCodigoFicha" name="editCodigoFicha" required>
 
-                  
+                    <label class="mt-2" for="editProgramaFicha">Programa</label>
+
+                    <select class="form-control" id="editProgramaFicha" name="editProgramaFicha" required>
+                    <option value="">Seleccione un programa</option>
+
+                        <?php
+                        $programas = ControladorProgramas::ctrMostrarProgramas(null);
+                        foreach ($programas as $programa) {
+                            echo '<option value="'.$programa["id_programa"].'">'.$programa["nombre_programa"].'</option>';
+                        }
+                        ?>
+                    </select>
+
+                    <label class="mt-2" for="editSedeFicha">Sede</label>
+                    <select class="form-control" id="editSedeFicha" name="editSedeFicha" required>
+                        <option value="">Seleccione una sede</option>
+                        <?php
+                        $sedes = ControladorSedes::ctrMostrarSedes(null);
+                        foreach ($sedes as $sede) {
+                            echo '<option value="'.$sede["id_sede"].'">'.$sede["nombre_sede"].'</option>';
+                        }
+                        ?>
+                    </select>
+
+                    <label class="mt-2" for="editModalidadFicha">Modalidad</label>
+                    <select class="form-control" id="editModalidadFicha" name="editModalidadFicha" required>
+                        <option value="Presencial">Presencial</option>
+                        <option value="Virtual">Virtual</option>
+                    </select>
+
+                    <label class="mt-2" for="editJornadaFicha">Jornada</label>
+                    <select class="form-control" id="editJornadaFicha" name="editJornadaFicha" required>
+                        <option value="Diurna">Diurna</option>
+                        <option value="Mixta">Mixta</option>
+                        <option value="Nocturna">Nocturna</option>
+                    </select>
+
+                    <label class="mt-2" for="editNivelFormacionFicha">Nivel de Formación</label>
+                    <select class="form-control" id="editNivelFormacionFicha" name="editNivelFormacionFicha" required>
+                        <option value="Técnico">Técnico</option>
+                        <option value="Tecnólogo">Tecnólogo</option>
+                    </select>
+
+                    <label class="mt-2" for="editTipoOfertaFicha">Tipo de Oferta</label>
+                    <select class="form-control" id="editTipoOfertaFicha" name="editTipoOfertaFicha" required>
+                        <option value="Abierta">Abierta</option>
+                        <option value="Cerrada">Cerrada</option>
+                    </select>
+
+                    <label class="mt-2" for="editFechaInicioFicha">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="editFechaInicioFicha" name="editFechaInicioFicha" required>
+
+                    <label class="mt-2" for="editFechaFinLecFicha">Fecha Fin Lectiva</label>
+                    <input type="date" class="form-control" id="editFechaFinLecFicha" name="editFechaFinLecFicha" required>
+
+                    <label class="mt-2" for="editFechaFinalFicha">Fecha Final</label>
+                    <input type="date" class="form-control" id="editFechaFinalFicha" name="editFechaFinalFicha" required>
 
                 </div>
+
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
                 </div>
 
                 <?php
@@ -254,3 +274,4 @@
         </div>
     </div>
 </div>
+

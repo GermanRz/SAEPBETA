@@ -119,13 +119,6 @@ aside.main-sidebar .brand-text {
                   <p>Modalidades</p>
                 </a>
               </li>               
-              
-              
-
-
-
-
-
 
             </ul>
           </li>
@@ -138,25 +131,37 @@ aside.main-sidebar .brand-text {
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
+          <ul class="nav nav-treeview">
 
             <li class="nav-item">
-                <a href="perfil" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Perfil</p>
-                </a>
-              </li> 
+              <a href="aprendices" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Aprendices</p>
+              </a>
+            </li>
 
-              <li class="nav-item">
-                <a href="usuarios" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Usuarios</p>
-                </a>
-              </li>               
+            <li class="nav-item">
+              <a href="evaluadores" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Evaluadores</p>
+              </a>
+            </li>
 
+            <li class="nav-item">
+              <a href="coevaluadores" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Coevaluadores</p>
+              </a>
+            </li>
 
+            <li class="nav-item">
+              <a href="auxiliares" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Auxiliares</p>
+              </a>
+            </li>
 
-            </ul>
+          </ul>
 
 
           <li class="nav-item">

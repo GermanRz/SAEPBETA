@@ -2,74 +2,117 @@
 
 require_once "conexion.php";
 
-class ModeloUsuarios{
-
-    static public function mdlMostrarUsuarios($tabla, $item, $valor){
-        $conexion = Conexion::conectar();
-
-        $stmt = $conexion->prepare("SELECT * FROM $tabla WHERE email = :email ");
-        $stmt->bindParam(":email", $valor, PDO::PARAM_STR);
-
-        $stmt-> execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-
-        $stmt->close();
-        $stmt = null;
-
-    }
-
-    // Nuevo método para obtener usuario por ID para EDITAR PERFIL
-    static public function mdlMostrarUsuarioPorId($tabla, $id){
-        $conexion = Conexion::conectar();
-
-        $stmt = $conexion->prepare("SELECT * FROM $tabla WHERE ID_usuarios = :id");
-        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-
+class ModeloUsuarios {
+static public function mdlMostrarUsuarios($valor = null) {
+    if ($valor != null) {
+        $stmt = Conexion::conectar()->prepare("
+            SELECT u.*, r.rol 
+            FROM usuarios u
+            JOIN rol r ON u.ID_rol = r.ID_rol
+            WHERE u.ID_usuarios = :id
+        ");
+        $stmt->bindParam(":id", $valor, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-
-        $stmt->close();
-        $stmt = null;
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+    } else {
+        $stmt = Conexion::conectar()->prepare("
+            SELECT u.*, r.rol 
+            FROM usuarios u
+            JOIN rol r ON u.ID_rol = r.ID_rol
+            ORDER BY u.ID_usuarios ASC
+        ");
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Nuevo método para actualizar usuario
-    static public function mdlEditarUsuario($tabla, $datos){
-        $conexion = Conexion::conectar();
+    $stmt->closeCursor();
+    $stmt = null;
+    return $resultado;
+}
 
-        $stmt = $conexion->prepare("UPDATE $tabla SET 
-            nombres = :nombres,
-            apellidos = :apellidos,
-            tipo_dc = :tipo_dc,
-            numero = :numero,
-            email = :email,
-            email_insti = :email_insti,
-            direccion = :direccion,
-            contacto1 = :contacto1,
-            estado = :estado,
-            ID_rol = :id_rol
-            WHERE ID_usuarios = :id");
 
-        $stmt->bindParam(":nombres", $datos["nombres"], PDO::PARAM_STR);
-        $stmt->bindParam(":apellidos", $datos["apellidos"], PDO::PARAM_STR);
+
+    static public function mdlIngresarUsuario($tabla, $datos) {
+        $stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(tipo_dc, numero, nombres, apellidos, email, email_insti, direccion, contacto1, contacto2, clave, estado, ID_rol) 
+                                               VALUES (:tipo_dc, :numero, :nombres, :apellidos, :email, :email_insti, :direccion, :contacto1, :contacto2, :clave, :estado, :ID_rol)");
+
         $stmt->bindParam(":tipo_dc", $datos["tipo_dc"], PDO::PARAM_STR);
         $stmt->bindParam(":numero", $datos["numero"], PDO::PARAM_STR);
+        $stmt->bindParam(":nombres", $datos["nombres"], PDO::PARAM_STR);
+        $stmt->bindParam(":apellidos", $datos["apellidos"], PDO::PARAM_STR);
         $stmt->bindParam(":email", $datos["email"], PDO::PARAM_STR);
         $stmt->bindParam(":email_insti", $datos["email_insti"], PDO::PARAM_STR);
         $stmt->bindParam(":direccion", $datos["direccion"], PDO::PARAM_STR);
         $stmt->bindParam(":contacto1", $datos["contacto1"], PDO::PARAM_STR);
+        $stmt->bindParam(":contacto2", $datos["contacto2"], PDO::PARAM_STR);
+        $stmt->bindParam(":clave", $datos["clave"], PDO::PARAM_STR);
         $stmt->bindParam(":estado", $datos["estado"], PDO::PARAM_STR);
-        $stmt->bindParam(":id_rol", $datos["id_rol"], PDO::PARAM_INT);
-        $stmt->bindParam(":id", $datos["id"], PDO::PARAM_INT);
+        $stmt->bindParam(":ID_rol", $datos["ID_rol"], PDO::PARAM_INT);
 
-        if($stmt->execute()){
+        if ($stmt->execute()) {
             return "ok";
         } else {
             return "error";
         }
 
-        $stmt->close();
         $stmt = null;
     }
 
+    static public function mdlEditarUsuario($datos) {
+        $stmt = Conexion::conectar()->prepare("UPDATE usuarios SET tipo_dc = :tipo_dc, numero = :numero, nombres = :nombres, apellidos = :apellidos, email = :email, 
+                                               email_insti = :email_insti, direccion = :direccion, contacto1 = :contacto1, contacto2 = :contacto2, ID_rol = :ID_rol 
+                                               WHERE ID_usuarios = :ID_usuarios");
 
-}//FIN CLASE ModeloUsuarios
+        $stmt->bindParam(":tipo_dc", $datos["tipo_dc"], PDO::PARAM_STR);
+        $stmt->bindParam(":numero", $datos["numero"], PDO::PARAM_STR);
+        $stmt->bindParam(":nombres", $datos["nombres"], PDO::PARAM_STR);
+        $stmt->bindParam(":apellidos", $datos["apellidos"], PDO::PARAM_STR);
+        $stmt->bindParam(":email", $datos["email"], PDO::PARAM_STR);
+        $stmt->bindParam(":email_insti", $datos["email_insti"], PDO::PARAM_STR);
+        $stmt->bindParam(":direccion", $datos["direccion"], PDO::PARAM_STR);
+        $stmt->bindParam(":contacto1", $datos["contacto1"], PDO::PARAM_STR);
+        $stmt->bindParam(":contacto2", $datos["contacto2"], PDO::PARAM_STR);
+        $stmt->bindParam(":ID_rol", $datos["ID_rol"], PDO::PARAM_INT);
+        $stmt->bindParam(":ID_usuarios", $datos["ID_usuarios"], PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return "ok";
+        } else {
+            return "error";
+        }
+
+        $stmt = null;
+    }
+    
+    static public function mdlCambiarEstadoUsuario($id, $estado) {
+        $stmt = Conexion::conectar()->prepare("UPDATE usuarios SET estado = :estado WHERE ID_usuarios = :id");
+
+        $stmt->bindParam(":estado", $estado, PDO::PARAM_STR);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return "ok";
+        } else {
+            return "error";
+        }
+
+        $stmt = null;
+    }
+
+    static public function mdlMostrarUsuarioPorCorreo($email) {
+        $stmt = Conexion::conectar()->prepare("
+            SELECT u.*, r.rol 
+            FROM usuarios u
+            JOIN rol r ON u.ID_rol = r.ID_rol
+            WHERE u.email = :email
+            LIMIT 1
+        ");
+    
+        $stmt->bindParam(":email", $email, PDO::PARAM_STR);
+        $stmt->execute();
+    
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Devuelve array o false
+    }
+    
+    
+}

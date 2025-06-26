@@ -113,8 +113,9 @@ class ModeloFichas {
         
       $stmt = Conexion::conectar()->prepare("UPDATE fichas SET estado = :estado WHERE ID_Fichas = :id_ficha");
     
-      $stmt->bindParam(":estado", $estado, PDO::PARAM_STR);
       $stmt->bindParam(":id_ficha", $valor, PDO::PARAM_INT);
+      $stmt->bindParam(":estado", $estado, PDO::PARAM_STR);
+      
     
         if ($stmt->execute()) 
         {
