@@ -93,19 +93,40 @@ class ControladorUsuarios{
     }//Fin método ingreso de usuario
 
 
-     // Nuevo método para mostrar datos del usuario actual
+     // Método para mostrar datos del usuario actual (MODIFICADO)
     static public function ctrMostrarUsuarioActual(){
         if(isset($_SESSION["idUsuario"])){
             $tabla = "usuarios";
             $id = $_SESSION["idUsuario"];
 
-            $respuesta = ModeloUsuarios::mdlMostrarUsuarioPorId($tabla, $id);
-            return $respuesta;
+            $usuario = ModeloUsuarios::mdlMostrarUsuarioPorId($tabla, $id);
+            
+            // Si es aprendiz, obtener datos adicionales
+            if($usuario && $usuario["ID_rol"] == 1){
+                $datosAprendiz = ModeloUsuarios::mdlObtenerDatosAprendiz($id);
+                if($datosAprendiz){
+                    $usuario["datos_aprendiz"] = $datosAprendiz;
+                }
+            }
+            
+            return $usuario;
         }
         return null;
     }
 
-    // Nuevo método para editar usuario
+     // NUEVOS MÉTODOS: Para obtener datos de los selects
+    static public function ctrObtenerModalidades(){
+        return ModeloUsuarios::mdlObtenerModalidades();
+    }
+
+    static public function ctrObtenerFichas(){
+        return ModeloUsuarios::mdlObtenerFichas();
+    }
+
+    static public function ctrObtenerEmpresas(){
+        return ModeloUsuarios::mdlObtenerEmpresas();
+    }
+  // Método para editar usuario (MODIFICADO para manejar datos de aprendiz)
     public function ctrEditarUsuario(){
         if(isset($_POST["editarUsuario"])){
             
@@ -133,6 +154,36 @@ class ControladorUsuarios{
                 );
 
                 $respuesta = ModeloUsuarios::mdlEditarUsuario($tabla, $datos);
+
+                // Si es aprendiz y la actualización de usuario fue exitosa, actualizar datos de aprendiz
+                if($respuesta == "ok" && $_POST["rol"] == "1"){
+                    $datosAprendiz = array(
+                        "id_usuario" => $_SESSION["idUsuario"],
+                        "estado_formativo" => $_POST["estadoFormativo"],
+                        "id_ficha" => $_POST["ficha"],
+                        "id_empresa" => $_POST["empresa"],
+                        "id_modalidad" => $_POST["modalidad"]
+                    );
+                    
+                    $respuestaAprendiz = ModeloUsuarios::mdlActualizarDatosAprendiz($datosAprendiz);
+                    
+                    if($respuestaAprendiz != "ok"){
+                        echo '<script>
+                            swal({
+                                type: "warning",
+                                title: "Usuario actualizado",
+                                text: "El usuario se actualizó correctamente, pero hubo un error al actualizar los datos de aprendiz",
+                                showConfirmButton: true,
+                                confirmButtonText: "Cerrar"
+                            }).then(function(result){
+                                if(result.value){
+                                    window.location = "editarperfil";
+                                }
+                            });
+                        </script>';
+                        return "warning";
+                    }
+                }
 
                 if($respuesta == "ok"){
                     // Actualizar datos de sesión
@@ -187,7 +238,6 @@ class ControladorUsuarios{
         }
         return null;
     }
-
 
 
 }//FIN DE CLASE USUARIOS

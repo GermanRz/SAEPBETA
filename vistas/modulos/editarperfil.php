@@ -19,6 +19,17 @@ if(!$usuario){
     echo '<script>window.location = "login";</script>';
     return;
 }
+
+// Obtener datos adicionales para aprendices
+$modalidades = [];
+$fichas = [];
+$empresas = [];
+
+if($usuario['ID_rol'] == 1){ // Si es aprendiz
+    $modalidades = ControladorUsuarios::ctrObtenerModalidades();
+    $fichas = ControladorUsuarios::ctrObtenerFichas();
+    $empresas = ControladorUsuarios::ctrObtenerEmpresas();
+}
 ?>
 
 <div class="wrapper">
@@ -144,6 +155,78 @@ if(!$usuario){
                     </div>
                   </div>
 
+                  <?php if($usuario['ID_rol'] == 1): // Campos adicionales solo para Aprendices ?>
+                  
+                  <hr class="my-4">
+                  <h5 class="text-center mb-3" style="color: #39A900;">
+                    <i class="fas fa-graduation-cap"></i> Información Académica
+                  </h5>
+
+                  <div class="form-group row">
+                    <label for="estadoFormativo" class="col-sm-3 col-form-label">Estado Formativo</label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="estadoFormativo" name="estadoFormativo" required disabled>
+                        <option value="">Seleccione estado formativo</option>
+                        <option value="En curso" <?php echo (isset($usuario['datos_aprendiz']['estado_formativo']) && $usuario['datos_aprendiz']['estado_formativo'] == 'En curso') ? 'selected' : ''; ?>>En curso</option>
+                        <option value="Aprobado" <?php echo (isset($usuario['datos_aprendiz']['estado_formativo']) && $usuario['datos_aprendiz']['estado_formativo'] == 'Aprobado') ? 'selected' : ''; ?>>Aprobado</option>
+                        <option value="No aprobado" <?php echo (isset($usuario['datos_aprendiz']['estado_formativo']) && $usuario['datos_aprendiz']['estado_formativo'] == 'No aprobado') ? 'selected' : ''; ?>>No aprobado</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="modalidad" class="col-sm-3 col-form-label">Modalidad</label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="modalidad" name="modalidad" required disabled>
+                        <option value="">Seleccione modalidad</option>
+                        <?php if($modalidades): ?>
+                          <?php foreach($modalidades as $modalidad): ?>
+                            <option value="<?php echo $modalidad['ID_modalidad']; ?>" 
+                                    <?php echo (isset($usuario['datos_aprendiz']['ID_modalidad']) && $usuario['datos_aprendiz']['ID_modalidad'] == $modalidad['ID_modalidad']) ? 'selected' : ''; ?>>
+                              <?php echo htmlspecialchars($modalidad['modalidad']); ?>
+                            </option>
+                          <?php endforeach; ?>
+                        <?php endif; ?>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="ficha" class="col-sm-3 col-form-label">Ficha</label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="ficha" name="ficha" required disabled>
+                        <option value="">Seleccione ficha</option>
+                        <?php if($fichas): ?>
+                          <?php foreach($fichas as $ficha): ?>
+                            <option value="<?php echo $ficha['ID_Fichas']; ?>" 
+                                    <?php echo (isset($usuario['datos_aprendiz']['ID_Fichas']) && $usuario['datos_aprendiz']['ID_Fichas'] == $ficha['ID_Fichas']) ? 'selected' : ''; ?>>
+                              <?php echo htmlspecialchars($ficha['codigo'] . ' - ' . $ficha['nombre_programa']); ?>
+                            </option>
+                          <?php endforeach; ?>
+                        <?php endif; ?>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <label for="empresa" class="col-sm-3 col-form-label">Empresa</label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="empresa" name="empresa" required disabled>
+                        <option value="">Seleccione empresa</option>
+                        <?php if($empresas): ?>
+                          <?php foreach($empresas as $empresa): ?>
+                            <option value="<?php echo $empresa['ID_empresas']; ?>" 
+                                    <?php echo (isset($usuario['datos_aprendiz']['ID_empresas']) && $usuario['datos_aprendiz']['ID_empresas'] == $empresa['ID_empresas']) ? 'selected' : ''; ?>>
+                              <?php echo htmlspecialchars($empresa['nombre_empresa']); ?>
+                            </option>
+                          <?php endforeach; ?>
+                        <?php endif; ?>
+                      </select>
+                    </div>
+                  </div>
+
+                  <?php endif; // Fin de campos adicionales para Aprendices ?>
+
                 </div>
 
                 <div class="card-footer text-center">
@@ -238,37 +321,17 @@ if(!$usuario){
   .header-flex .btn {
     margin-left: auto !important;
   }
+
+  /* Estilos para la sección de información académica */
+  .text-center h5 {
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  hr.my-4 {
+    border-top: 2px solid #39A900;
+    opacity: 0.3;
+  }
 </style>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const btnEditar = document.getElementById('btnEditar');
-    const btnGuardar = document.getElementById('btnGuardar');
-    
-    // Todos los inputs y selects del formulario
-    const campos = document.querySelectorAll('#nombres, #apellidos, #tipoDocumento, #identificacion, #email, #emailInstitucional, #direccion, #contacto, #rol, #estado');
-    
-    let modoEdicion = false;
-    
-    btnEditar.addEventListener('click', function() {
-        if (!modoEdicion) {
-            // Habilitar modo edición
-            campos.forEach(campo => {
-                campo.disabled = false;
-            });
-            
-            btnGuardar.disabled = false;
-            btnEditar.innerHTML = '<i class="fas fa-times"></i> Cancelar';
-            btnEditar.classList.remove('btn-success');
-            btnEditar.classList.add('btn-danger');
-            
-            modoEdicion = true;
-        } else {
-            // Cancelar edición - recargar página para restaurar valores originales
-            if (confirm('¿Está seguro de que desea cancelar los cambios?')) {
-                location.reload();
-            }
-        }
-    });
-});
-</script>
+<script src="vistas/js/editarperfil.js"></script>
