@@ -116,3 +116,86 @@ static public function mdlMostrarUsuarios($valor = null) {
     
     
 }
+    /*=============================================
+    OBTENER PROGRESO DEL APRENDIZ
+    =============================================*/
+    static public function mdlObtenerProgresoAprendiz($idAprendiz) {
+        try {
+            // Consulta para obtener el progreso basado en la ficha del aprendiz
+            $stmt = Conexion::conectar()->prepare(
+                "SELECT 
+                    f.fecha_inicio,
+                    f.fecha_final AS fecha_fin,
+                    ROUND(
+                        (DATEDIFF(CURDATE(), f.fecha_inicio) / 
+                        NULLIF(DATEDIFF(f.fecha_final, f.fecha_inicio), 0) * 100), 0
+                    ) AS porcentaje_completado,
+                    p.nombre_programa,
+                    s.nombre_sede,
+                    m.modalidad AS modalidad_formacion
+                FROM aprendices a
+                JOIN fichas f ON a.ID_Fichas = f.ID_Fichas
+                JOIN programas p ON f.ID_programas = p.ID_programas
+                JOIN sede s ON f.ID_sede = s.ID_sede
+                JOIN modalidad m ON a.ID_modalidad = m.ID_modalidad
+                WHERE a.ID_usuarios = :id_aprendiz
+                AND a.estado = 'En curso'"
+            );
+            
+            $stmt->bindParam(":id_aprendiz", $idAprendiz, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Validar y ajustar porcentaje
+            if($resultado) {
+                $porcentaje = $resultado['porcentaje_completado'];
+                $resultado['porcentaje_completado'] = min(max($porcentaje, 0), 100);
+                return $resultado;
+            }
+            
+            // Valores por defecto si no hay ficha asignada
+            return [
+                'porcentaje_completado' => 0,
+                'fecha_inicio' => date('Y-m-d'),
+                'fecha_fin' => date('Y-m-d', strtotime('+6 months')),
+                'nombre_programa' => 'Programa no asignado',
+                'nombre_sede' => 'Sede no asignada',
+                'modalidad_formacion' => 'Modalidad no asignada'
+            ];
+            
+        } catch (PDOException $e) {
+            error_log("Error en mdlObtenerProgresoAprendiz: " . $e->getMessage());
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    }
+
+    /*=============================================
+    OBTENER NOVEDADES DEL APRENDIZ
+    =============================================*/
+    static public function mdlObtenerNovedadesAprendiz($idAprendiz) {
+        try {
+            $stmt = Conexion::conectar()->prepare(
+                "SELECT n.novedad, n.fecha 
+                FROM novedades n
+                JOIN aprendices a ON n.ID_aprendiz = a.ID_numeroAprendices
+                WHERE a.ID_usuarios = :id_aprendiz
+                ORDER BY n.fecha DESC
+                LIMIT 5"
+            );
+            
+            $stmt->bindParam(":id_aprendiz", $idAprendiz, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+        } catch (PDOException $e) {
+            error_log("Error en mdlObtenerNovedadesAprendiz: " . $e->getMessage());
+            return false;
+        } finally {
+            $stmt = null;
+        }
+    }
+}//FIN CLASE ModeloUsuarios

@@ -7,3 +7,9 @@ class ControladorPlantilla {
     }
 
 }
+
+                // var_dump($_POST["ingEmail"]);
+                // var_dump($_POST["ingEmail"]);
+                // var_dump($_POST["ingEmail"]);
+                // var_dump($_POST["ingEmail"]);
+                // var_dump($_POST["ingEmail"]);

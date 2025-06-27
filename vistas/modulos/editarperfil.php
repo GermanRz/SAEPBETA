@@ -5,6 +5,13 @@ if(!isset($_SESSION["iniciarSesion"]) || $_SESSION["iniciarSesion"] != "ok"){
     return;
 }
 
+// PROCESAR EL FORMULARIO PRIMERO
+$resultadoEdicion = null;
+if(isset($_POST["editarUsuario"])){
+    $editarUsuario = new ControladorUsuarios();
+    $resultadoEdicion = $editarUsuario->ctrEditarUsuario();
+}
+
 // Obtener datos del usuario actual
 $usuario = ControladorUsuarios::ctrCrearUsuario();
 
@@ -144,11 +151,6 @@ if(!$usuario){
                     <i class="fas fa-save"></i> Guardar cambios
                   </button>
                 </div>
-
-                <?php
-                  $editarUsuario = new ControladorUsuarios();
-                  $editarUsuario -> ctrEditarUsuario();
-                ?>
 
               </form>
 
