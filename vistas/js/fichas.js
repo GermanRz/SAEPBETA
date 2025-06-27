@@ -30,10 +30,13 @@ $(document).on('click', '.btnEditarFicha', function () {
             $("#editFechaInicioFicha").val(respuesta["fecha_inicio"]);
             $("#editFechaFinLecFicha").val(respuesta["fecha_fin_lec"]);
             $("#editFechaFinalFicha").val(respuesta["fecha_final"]);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en AJAX:", error);
+            console.error("Respuesta del servidor:", xhr.responseText);
         }
     });
 });
-
 
 // ==============================
 // Evento para ACTIVAR/INACTIVAR ficha
@@ -54,15 +57,74 @@ $(document).on('click', '.btnActivarFicha', function () {
         processData: false,
         success: function (respuesta) {
             console.log("Estado cambiado:", respuesta);
+            
+            // Verificar si la respuesta es exitosa
+            if (respuesta.includes("ok") || respuesta === '"ok"') {
+                // Solo cambiar visualmente si el servidor confirmó el cambio
+                if (nuevoEstado === "Inactivo") {
+                    $(`button[idFichaCambiarEstado="${idFichaActivar}"]`)
+                        .removeClass("btn-success")
+                        .addClass("btn-danger")
+                        .html("Inactivo")
+                        .attr("nuevoEstado", "Activo");
+                } else {
+                    $(`button[idFichaCambiarEstado="${idFichaActivar}"]`)
+                        .removeClass("btn-danger")
+                        .addClass("btn-success")
+                        .html("Activo")
+                        .attr("nuevoEstado", "Inactivo");
+                }
+            } else {
+                console.error("Error al cambiar estado:", respuesta);
+                alert("Error al cambiar el estado de la ficha");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en AJAX:", error);
+            alert("Error de conexión al cambiar estado");
         }
     });
+});
 
-    // Cambio visual del botón (inmediato)
-    if (nuevoEstado === "Inactiva") {
-        $(this).removeClass("btn-success").addClass("btn-danger").html("Inactiva");
-        $(this).attr("nuevoEstado", "Activa");
-    } else {
-        $(this).removeClass("btn-danger").addClass("btn-success").html("Activa");
-        $(this).attr("nuevoEstado", "Inactiva");
-    }
+// ==============================
+// Validación adicional de formularios
+// ==============================
+$(document).ready(function() {
+    // Validar fechas en modal de agregar
+    $('#modalAgregarFicha form').on('submit', function(e) {
+        let fechaInicio = new Date($('input[name="fechaInicioFicha"]').val());
+        let fechaFinLec = new Date($('input[name="fechaFinLecFicha"]').val());
+        let fechaFinal = new Date($('input[name="fechaFinalFicha"]').val());
+        
+        if (fechaInicio >= fechaFinLec) {
+            e.preventDefault();
+            alert('La fecha de inicio debe ser anterior a la fecha fin lectiva');
+            return false;
+        }
+        
+        if (fechaFinLec >= fechaFinal) {
+            e.preventDefault();
+            alert('La fecha fin lectiva debe ser anterior a la fecha final');
+            return false;
+        }
+    });
+    
+    // Validar fechas en modal de editar
+    $('#modalEditarFicha form').on('submit', function(e) {
+        let fechaInicio = new Date($('#editFechaInicioFicha').val());
+        let fechaFinLec = new Date($('#editFechaFinLecFicha').val());
+        let fechaFinal = new Date($('#editFechaFinalFicha').val());
+        
+        if (fechaInicio >= fechaFinLec) {
+            e.preventDefault();
+            alert('La fecha de inicio debe ser anterior a la fecha fin lectiva');
+            return false;
+        }
+        
+        if (fechaFinLec >= fechaFinal) {
+            e.preventDefault();
+            alert('La fecha fin lectiva debe ser anterior a la fecha final');
+            return false;
+        }
+    });
 });

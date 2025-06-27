@@ -23,7 +23,7 @@ class ControladorAprendices {
             "estado" => "Activo"
           );
       
-          $idNuevoUsuario = ModeloUsuarios::mdlInsertarUsuario("usuarios", $datosUsuario);
+          $idNuevoUsuario = ModeloAprendices::mdlInsertarAprendiz("usuarios", $datosUsuario);
       
           // Si se insertó el usuario correctamente
           if ($idNuevoUsuario > 0) {

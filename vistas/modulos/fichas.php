@@ -1,3 +1,10 @@
+<?php
+// Asegúrate de incluir los controladores necesarios al inicio del archivo
+require_once "controladores/fichas.controlador.php";
+require_once "controladores/programas.controlador.php"; // Agregar este
+require_once "controladores/sedes.controlador.php";     // Agregar este
+?>
+
 <div class="content-wrapper">
 
     <!-- Encabezado -->
@@ -32,7 +39,7 @@
             <div class="row">
                 <div class="col-12">
                     
-                    <div class="card-body ">
+                    <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -70,12 +77,12 @@
                                     echo '<td>' . $value["fecha_fin_lec"] . '</td>';
                                     echo '<td>' . $value["fecha_final"] . '</td>';
 
-                                    // Botón estado
-                                    if ($value["estado"] == "Activa") {
-                                        echo '<td><button class="btn btn-success btn-sm btnActivarFicha" idFichaCambiarEstado="' . $value["ID_Fichas"] . '" nuevoEstado="Inactiva">Activa</button></td>';
-                                      } else {
-                                        echo '<td><button class="btn btn-danger btn-sm btnActivarFicha" idFichaCambiarEstado="' . $value["ID_Fichas"] . '" nuevoEstado="Activa">Inactiva</button></td>';
-                                      }
+                                    // Botón estado - CORREGIDO
+                                    if ($value["estado"] == "Activo") { // Cambiado de "Activa" a "Activo"
+                                        echo '<td><button class="btn btn-success btn-sm btnActivarFicha" idFichaCambiarEstado="' . $value["ID_Fichas"] . '" nuevoEstado="Inactivo">Activo</button></td>';
+                                    } else {
+                                        echo '<td><button class="btn btn-danger btn-sm btnActivarFicha" idFichaCambiarEstado="' . $value["ID_Fichas"] . '" nuevoEstado="Activo">Inactivo</button></td>';
+                                    }
                                       
                                     // Botón editar
                                     echo '<td><button class="btn btn-xs btn-primary btnEditarFicha" idFicha="' . $value["ID_Fichas"] . '" data-toggle="modal" data-target="#modalEditarFicha"><i class="fas fa-pencil-alt"></i></button></td>';
@@ -109,58 +116,60 @@
 
                     <input type="text" class="form-control" name="codigoFicha" placeholder="Código de Ficha" required>
 
-                    <select class="form-control mt-2" name="id_programa" required>
+                    <select class="form-control mt-2" name="programaFicha" required>
                         <option value="">Seleccione un programa</option>
                         <?php
-                        $programas = ControladorProgramas::ctrMostrarProgramas(null);
-                        foreach ($programas as $programa) {
-                            echo '<option value="'.$programa["id_programa"].'">'.$programa["nombre_programa"].'</option>';
+                        // Verifica si existe el controlador antes de usarlo
+                        if (class_exists('ControladorProgramas')) {
+                            $programas = ControladorProgramas::ctrMostrarProgramas(null);
+                            foreach ($programas as $programa) {
+                                echo '<option value="'.$programa["ID_programas"].'">'.$programa["nombre_programa"].'</option>';
+                            }
                         }
                         ?>
                     </select>
                     
-                    <select class="form-control mt-2" name="id_sede" required>
+                    <select class="form-control mt-2" name="sedeFicha" required>
                         <option value="">Seleccione una sede</option>
                         <?php
-                        $sedes = ControladorSedes::ctrMostrarSedes(null);
-                        foreach ($sedes as $sede) {
-                            echo '<option value="'.$sede["id_sede"].'">'.$sede["nombre_sede"].'</option>';
+                        // Verifica si existe el controlador antes de usarlo
+                        if (class_exists('ControladorSedes')) {
+                            $sedes = ControladorSedes::ctrMostrarSedes(null);
+                            foreach ($sedes as $sede) {
+                                echo '<option value="'.$sede["ID_sede"].'">'.$sede["nombre_sede"].'</option>';
+                            }
                         }
                         ?>
                     </select>
 
-
-
-                    <select class="form-control mt-2" name="modalidad" required>
+                    <select class="form-control mt-2" name="modalidadFicha" required>
                         <option value="">Seleccione modalidad</option>
                         <option value="Presencial">Presencial</option>
                         <option value="Virtual">Virtual</option>
                     </select>
 
-                    <select class="form-control mt-2" name="jornada" required>
+                    <select class="form-control mt-2" name="jornadaFicha" required>
                         <option value="">Seleccione jornada</option>
                         <option value="Diurna">Diurna</option>
                         <option value="Mixta">Mixta</option>
                         <option value="Nocturna">Nocturna</option>
                     </select>
 
-                    <select class="form-control mt-2" name="nivel_formacion" required>
+                    <select class="form-control mt-2" name="nivelFormacionFicha" required>
                         <option value="">Seleccione nivel de formación</option>
                         <option value="Técnico">Técnico</option>
                         <option value="Tecnólogo">Tecnólogo</option>
                     </select>
 
-                    <select class="form-control mt-2" name="tipo_oferta" required>
+                    <select class="form-control mt-2" name="tipoOfertaFicha" required>
                         <option value="">Seleccione tipo de oferta</option>
                         <option value="Abierta">Abierta</option>
                         <option value="Cerrada">Cerrada</option>
                     </select>
 
-                    <input type="date" class="form-control mt-2" name="fecha_inicio" placeholder="Fecha de Inicio" required>
-                    <input type="date" class="form-control mt-2" name="fecha_fin_lec" placeholder="Fecha Fin Lectiva" required>
-                    <input type="date" class="form-control mt-2" name="fecha_final" placeholder="Fecha Final" required>
-
-                    <input type="hidden" name="estado_ficha" value="Activo">
+                    <input type="date" class="form-control mt-2" name="fechaInicioFicha" placeholder="Fecha de Inicio" required>
+                    <input type="date" class="form-control mt-2" name="fechaFinLecFicha" placeholder="Fecha Fin Lectiva" required>
+                    <input type="date" class="form-control mt-2" name="fechaFinalFicha" placeholder="Fecha Final" required>
 
                 </div>
 
@@ -178,7 +187,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- ========== Modal Editar Ficha ========== -->
 <div class="modal fade" id="modalEditarFicha">
@@ -201,14 +209,14 @@
                     <input type="text" class="form-control" id="editCodigoFicha" name="editCodigoFicha" required>
 
                     <label class="mt-2" for="editProgramaFicha">Programa</label>
-
                     <select class="form-control" id="editProgramaFicha" name="editProgramaFicha" required>
-                    <option value="">Seleccione un programa</option>
-
+                        <option value="">Seleccione un programa</option>
                         <?php
-                        $programas = ControladorProgramas::ctrMostrarProgramas(null);
-                        foreach ($programas as $programa) {
-                            echo '<option value="'.$programa["id_programa"].'">'.$programa["nombre_programa"].'</option>';
+                        if (class_exists('ControladorProgramas')) {
+                            $programas = ControladorProgramas::ctrMostrarProgramas(null);
+                            foreach ($programas as $programa) {
+                                echo '<option value="'.$programa["ID_programas"].'">'.$programa["nombre_programa"].'</option>';
+                            }
                         }
                         ?>
                     </select>
@@ -217,9 +225,11 @@
                     <select class="form-control" id="editSedeFicha" name="editSedeFicha" required>
                         <option value="">Seleccione una sede</option>
                         <?php
-                        $sedes = ControladorSedes::ctrMostrarSedes(null);
-                        foreach ($sedes as $sede) {
-                            echo '<option value="'.$sede["id_sede"].'">'.$sede["nombre_sede"].'</option>';
+                        if (class_exists('ControladorSedes')) {
+                            $sedes = ControladorSedes::ctrMostrarSedes(null);
+                            foreach ($sedes as $sede) {
+                                echo '<option value="'.$sede["ID_sede"].'">'.$sede["nombre_sede"].'</option>';
+                            }
                         }
                         ?>
                     </select>
@@ -274,4 +284,3 @@
         </div>
     </div>
 </div>
-

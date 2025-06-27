@@ -121,6 +121,7 @@ session_start();
   <script src="vistas/js/modalidades.js"></script>
   <script src="vistas/js/fichas.js"></script>
   <script src="vistas/js/sedes.js"></script>
+  <script src="vistas/js/coevaluador.js"></script>
   
   
 

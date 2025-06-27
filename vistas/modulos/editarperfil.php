@@ -6,7 +6,7 @@ if(!isset($_SESSION["iniciarSesion"]) || $_SESSION["iniciarSesion"] != "ok"){
 }
 
 // Obtener datos del usuario actual
-$usuario = ControladorUsuarios::ctrMostrarUsuarioActual();
+$usuario = ControladorUsuarios::ctrCrearUsuario();
 
 if(!$usuario){
     echo '<script>window.location = "login";</script>';
