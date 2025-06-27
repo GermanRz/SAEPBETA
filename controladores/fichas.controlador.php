@@ -31,7 +31,7 @@ static public function ctrMostrarFichas($valor = null) {
                 preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nivelFormacionFicha"]) &&
                 preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["tipoOfertaFicha"])&&
                 preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST["fechaInicioFicha"])&&
-                preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST["fechaFinLectiva"])&&
+                preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST["fechaFinLecFicha"])&&
                 preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST["fechaFinalFicha"])
 
 

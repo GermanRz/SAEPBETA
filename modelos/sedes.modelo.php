@@ -8,6 +8,7 @@
 
             if($dato == null){
                 $stmt = Conexion::conectar()->prepare("SELECT * FROM sede");
+
         
                 $stmt-> execute();
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -20,7 +21,6 @@
 
             }
             
-    
             $stmt->close();
             $stmt = null;
 

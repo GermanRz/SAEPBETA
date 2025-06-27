@@ -13,7 +13,7 @@ if(isset($_POST["editarUsuario"])){
 }
 
 // Obtener datos del usuario actual
-$usuario = ControladorUsuarios::ctrMostrarUsuarioActual();
+$usuario = ControladorUsuarios::ctrCrearUsuario();
 
 if(!$usuario){
     echo '<script>window.location = "login";</script>';
