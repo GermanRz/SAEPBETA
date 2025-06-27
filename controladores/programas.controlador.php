@@ -21,7 +21,7 @@
 
             if(isset($_POST["descripcionPrograma"]) && isset($_POST["versionPrograma"])){
                 if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ. ]+$/', $_POST["descripcionPrograma"]) &&
-                   preg_match('/^[a-zA-Z0-9_.-]+$/', $_POST["versionPrograma"])){
+                preg_match('/^[a-zA-Z0-9_.-]+$/', $_POST["versionPrograma"])){
 
                     $tabla = "programas";
                     $datos = array(

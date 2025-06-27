@@ -39,7 +39,7 @@ class ModeloEmpresas{
 
         $stmt = $conexion->prepare("UPDATE $tabla SET 
             nit = :nit,
-            nombre_empresa = :nombre_empresa,
+            nombre = :nombre,
             direccion = :direccion,
             area = :area,
             email = :email,
@@ -48,10 +48,10 @@ class ModeloEmpresas{
             departamento = :departamento,
             ciudad  = :ciudad,
             estado  = :estado 
-            WHERE ID_empresas = :id");
+            WHERE id_empresas = :id");
 
         $stmt->bindParam(":nit", $datos["nit"], PDO::PARAM_STR);
-        $stmt->bindParam(":nombre_empresa", $datos["nombre_empresa"], PDO::PARAM_STR);
+        $stmt->bindParam(":nombre", $datos["nombre"], PDO::PARAM_STR);
         $stmt->bindParam(":direccion", $datos["direccion"], PDO::PARAM_STR);
         $stmt->bindParam(":area", $datos["area"], PDO::PARAM_STR);
         $stmt->bindParam(":email", $datos["email"], PDO::PARAM_STR);
@@ -71,5 +71,8 @@ class ModeloEmpresas{
         $stmt->close();
         $stmt = null;
     }
+    
+
+    
 
 }//FIN CLASE ModeloEmpresas

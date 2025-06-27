@@ -22,7 +22,7 @@ class ControladorEmpresas
 
             if (
                 isset($_POST["nit"]) &&
-                isset($_POST["nombre_empresa"]) &&
+                isset($_POST["nombre"]) &&
                 isset($_POST["direccion"]) &&
                 isset($_POST["area"]) &&
                 isset($_POST["coevaluador"]) &&
@@ -34,7 +34,7 @@ class ControladorEmpresas
             ) {
                 if (
                     preg_match('/^[0-9]+$/', $_POST["nit"]) &&
-                    preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9.,-]+$/', $_POST["nombre_empresa"]) &&
+                    preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9.,-]+$/', $_POST["nombre"]) &&
                     preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9.,#-]+$/', $_POST["direccion"]) &&
                     preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9.,-]+$/', $_POST["area"]) &&
                     preg_match('/^[0-9]+$/', $_POST["coevaluador"]) && // coevaluador es ID numérico
@@ -47,10 +47,10 @@ class ControladorEmpresas
                     $tabla = "empresas";
                     $datos = array(
                         "nit" => $_POST["nit"],
-                        "nombre_empresa" => $_POST["nombre_empresa"],
+                        "nombre" => $_POST["nombre"],
                         "direccion" => $_POST["direccion"],
                         "area" => $_POST["area"],
-                        "coevaluador" => $_POST["coevaluador"],
+                        "id_usuarios" => $_POST["coevaluador"], // ✅ CORRECTO para el registro
                         "contacto" => $_POST["contacto"],
                         "email" => $_POST["email"],
                         "departamento" => $_POST["departamento"],
@@ -94,14 +94,17 @@ class ControladorEmpresas
         }
     }
 
-    /*=============================================
-    EDITAR EMPRESA
-    =============================================*/
-    static public function ctrEditarEmpresa()
-    {
+   /*=============================================
+EDITAR EMPRESA
+=============================================*/
+static public function ctrEditarEmpresa()
+{
+    if (isset($_POST["editarEmpresa"])) {
+
         if (
+            isset($_POST["idempresa"]) && // ← Asegurarse de que venga el ID
             isset($_POST["editNit"]) &&
-            isset($_POST["editNombre_empresa"]) &&
+            isset($_POST["editNombre"]) &&
             isset($_POST["editDireccion"]) &&
             isset($_POST["editArea"]) &&
             isset($_POST["editCoevaluador"]) &&
@@ -111,9 +114,11 @@ class ControladorEmpresas
             isset($_POST["editCiudad"]) &&
             isset($_POST["editEstado"])
         ) {
+
             if (
+                preg_match('/^[0-9]+$/', $_POST["idempresa"]) &&
                 preg_match('/^[0-9]+$/', $_POST["editNit"]) &&
-                preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9.,-]+$/', $_POST["editNombre_empresa"]) &&
+                preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9.,-]+$/', $_POST["editNombre"]) &&
                 preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9.,#-]+$/', $_POST["editDireccion"]) &&
                 preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ 0-9.,-]+$/', $_POST["editArea"]) &&
                 preg_match('/^[0-9]+$/', $_POST["editCoevaluador"]) &&
@@ -123,21 +128,23 @@ class ControladorEmpresas
                 preg_match('/^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["editCiudad"]) &&
                 preg_match('/^(Activo|Inactivo)$/', $_POST["editEstado"])
             ) {
+
                 $datos = array(
-                    "nit" => $_POST["editNit"],
-                    "nombre_empresa" => $_POST["editNombre_empresa"],
-                    "direccion" => $_POST["editDireccion"],
-                    "area" => $_POST["editArea"],
-                    "coevaluador" => $_POST["editCoevaluador"],
-                    "contacto" => $_POST["editContacto"],
-                    "email" => $_POST["editEmail"],
-                    "departamento" => $_POST["editDepartamento"],
-                    "ciudad" => $_POST["editCiudad"],
-                    "estado" => $_POST["editEstado"]
+                    "id_empresas" => $_POST["idempresa"], // ← NUEVO: usar id_empresas para identificar
+                    "nit"         => $_POST["editNit"],
+                    "nombre"      => $_POST["editNombre"],
+                    "direccion"   => $_POST["editDireccion"],
+                    "area"        => $_POST["editArea"],
+                    "id_usuarios" => $_POST["editCoevaluador"],
+                    "contacto"    => $_POST["editContacto"],
+                    "email"       => $_POST["editEmail"],
+                    "departamento"=> $_POST["editDepartamento"],
+                    "ciudad"      => $_POST["editCiudad"],
+                    "estado"      => $_POST["editEstado"]
                 );
 
                 $tabla = "empresas";
-                $respuesta = ModeloEmpresas::mdlEditarEmpresas($tabla, $datos);
+                $respuesta = ModeloEmpresas::mdlEditarEmpresa($tabla, $datos);
 
                 if ($respuesta == "ok") {
                     echo '<script>
@@ -147,14 +154,33 @@ class ControladorEmpresas
                         confirmButtonText: "Cerrar"
                     }).then(function(result){
                         if(result.isConfirmed){
-                            window.location = "empresas";
+                            $("#actualizarModal").modal("hide");
+                            // Opcional: recarga AJAX
                         }
                     });
                     </script>';
+                } else {
+                    echo '<script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error al actualizar la empresa",
+                        confirmButtonText: "Cerrar"
+                    });
+                    </script>';
                 }
+
+            } else {
+                echo '<script>
+                Swal.fire({
+                    icon: "warning",
+                    title: "Datos inválidos en el formulario",
+                    confirmButtonText: "Cerrar"
+                });
+                </script>';
             }
         }
     }
+}
 
     /*=============================================
     CAMBIAR ESTADO EMPRESA

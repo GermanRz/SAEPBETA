@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Empresas</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .selected { background: #d4edda !important; }
-        .btn-group { margin-top: 15px; }
-    </style>
-</head>
 <body>
 <div class="container mt-4">
-    <h3>Empresas</h3>
+     <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0">Empresas</h3>
+        <button class="btn btn-success" onclick="generarPDF()">Generar PDF</button>
+    </div>
     <table class="table table-bordered" id="empresaTable">
         <thead class="thead-light">
             <tr>
@@ -20,58 +12,67 @@
                 <th>Teléfono</th>
                 <th>Coevaluador</th>
                 <th>Estado</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
 <?php
-$conn = new mysqli("localhost", "root", "", "saep");
-if ($conn->connect_error) {
-    die("Conexión fallida: " . $conn->connect_error);
-}
+require_once __DIR__ . "/../../modelos/conexion.php";
+$conn = Conexion::conectar();
 
-$sql = "SELECT e.ID_usuarios, e.nit, e.nombre_empresa, e.contacto, e.email, 
-               e.direccion, e.departamento, e.ciudad, e.area, e.estado,
-               CONCAT(u.nombres, ' ', u.apellidos) AS coevaluador
+$sql = "SELECT 
+            e.id_empresas,                       
+            e.id_usuarios, 
+            e.nit, 
+            e.nombre, 
+            e.contacto, 
+            e.email, 
+            e.direccion, 
+            e.departamento, 
+            e.ciudad, 
+            e.area, 
+            e.estado,
+            CONCAT(u.nombres, ' ', u.apellidos) AS coevaluador
         FROM empresas e
-        LEFT JOIN usuarios u ON e.ID_usuarios = u.ID_usuarios";
-$result = $conn->query($sql);
+        LEFT JOIN usuarios u ON e.id_usuarios = u.id_usuarios";
 
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-  echo "<tr onclick=\"selectRow(this)\" 
-        data-idusuario='{$row['ID_usuarios']}'
-        data-nit='{$row['nit']}'
-        data-nombre='{$row['nombre_empresa']}'
-        data-direccion='{$row['direccion']}'
-        data-area='{$row['area']}'
-        data-contacto='{$row['contacto']}'
-        data-email='{$row['email']}'
-        data-departamento='{$row['departamento']}'
-        data-ciudad='{$row['ciudad']}'
-        data-coevaluador='{$row['coevaluador']}'
-        data-estado='{$row['estado']}'>
-    <td>{$row['nit']}</td>
-    <td>{$row['nombre_empresa']}</td>
-    <td>{$row['contacto']}</td>
-    <td>{$row['coevaluador']}</td>
-    <td>{$row['estado']}</td>
-</tr>";
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (count($result) > 0) {
+    foreach ($result as $row) {
+        echo "<tr 
+            data-idempresa='{$row['id_empresas']}'
+            data-idusuario='{$row['id_usuarios']}'
+            data-nit='{$row['nit']}'
+            data-nombre='{$row['nombre']}'
+            data-direccion='{$row['direccion']}'
+            data-area='{$row['area']}'
+            data-contacto='{$row['contacto']}'
+            data-email='{$row['email']}'
+            data-departamento='{$row['departamento']}'
+            data-ciudad='{$row['ciudad']}'
+            data-coevaluador='{$row['coevaluador']}'
+            data-estado='{$row['estado']}'>
+            <td>{$row['nit']}</td>
+            <td>{$row['nombre']}</td>
+            <td>{$row['contacto']}</td>
+            <td>{$row['coevaluador']}</td>
+            <td>{$row['estado']}</td>
+            <td>
+                <button class='btn btn-sm btn-info'   onclick='mostrarDetalles(this)'>🔍</button>
+                <button class='btn btn-sm btn-warning' onclick='mostrarActualizar(this)'>✏️</button>
+            </td>
+        </tr>";
     }
 } else {
-    echo "<tr><td colspan='5' class='text-center'>No hay empresas registradas.</td></tr>";
+    echo "<tr><td colspan='6' class='text-center'>No hay empresas registradas.</td></tr>";
 }
-$conn->close();
 ?>
 </tbody>
-                </table>
-                <div class="d-flex justify-content-end">
-                <div class="btn-group">
-                    <button class="btn btn-info" data-toggle="modal" data-target="#detalleModal">Detalles</button>
-                    <button class="btn btn-warning" data-toggle="modal" data-target="#actualizarModal">Actualizar</button>
-                    <button class="btn btn-success" onclick="generarPDF()">Generar PDF</button>
-                </div>
-                </div>
-            </div>
+    </table>
+</div>
 
 
 <!-- Modal Detalles -->
@@ -105,158 +106,109 @@ $conn->close();
                 <h5 class="modal-title">Actualizar Empresa</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <div class="modal-body">
-                <form id="formActualizar">
+
+            <form method="POST" action="" id="formActualizar"> 
+                <input type="hidden" id="updateID" name="id">
+                <div class="modal-body">
                     <div class="form-group">
                         <label for="updateNit">NIT:</label>
-                        <input type="text" class="form-control" id="updateNit" readonly>
+                        <input type="text" class="form-control" id="updateNit" name="editNit">
                     </div>
                     <div class="form-group">
                         <label for="updateNombre">Nombre:</label>
-                        <input type="text" class="form-control" id="updateNombre" required>
+                        <input type="text" class="form-control" id="updateNombre" name="editNombre" required>
                     </div>
                     <div class="form-group">
                         <label for="updateTelefono">Teléfono:</label>
-                        <input type="text" class="form-control" id="updateTelefono" required>
+                        <input type="text" class="form-control" id="updateTelefono" name="editContacto" required>
                     </div>
                     <div class="form-group">
                         <label for="updateEmail">Email:</label>
-                        <input type="email" class="form-control" id="updateEmail">
+                        <input type="email" class="form-control" id="updateEmail" name="editEmail">
                     </div>
                     <div class="form-group">
                         <label for="updateDireccion">Dirección:</label>
-                        <input type="text" class="form-control" id="updateDireccion">
+                        <input type="text" class="form-control" id="updateDireccion" name="editDireccion">
                     </div>
-                    <div class="form-group">
-                        <label for="updateDepartamento">Departamento:</label>
-                        <input type="text" class="form-control" id="updateDepartamento">
-                    </div>
-                    <div class="form-group">
-                        <label for="updateCiudad">Ciudad:</label>
-                        <input type="text" class="form-control" id="updateCiudad">
-                    </div>
+                <div class="form-group">
+    <label for="departamento">Departamento</label>
+    <select class="form-control" id="updateDepartamento" name="departamento" required>
+        <option value="">Seleccione un departamento</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="ciudad">Ciudad</label>
+   <select class="form-control" id="updateCiudad" name="ciudad" required>
+        <option value="">Seleccione una ciudad</option>
+    </select>
+</div>
+
+                                            
                     <div class="form-group">
                         <label for="updateArea">Área:</label>
-                        <input type="text" class="form-control" id="updateArea">
+                        <input type="text" class="form-control" id="updateArea" name="editArea">
                     </div>
+
                     <div class="form-group">
                         <label for="updateCoevaluador">Coevaluador:</label>
-                        <select class="form-control" id="updateCoevaluador" name="coevaluador" required>
+                        <select class="form-control" id="updateCoevaluador" name="editCoevaluador" required>
                             <option value="">Seleccione un coevaluador</option>
                             <?php
-                            $conn = new mysqli("localhost", "root", "", "saep");
-                            if ($conn->connect_error) {
-                                die("Conexión fallida: " . $conn->connect_error);
-                            }
-                            $sql = "SELECT ID_usuarios, CONCAT(nombres, ' ', apellidos) AS nombre_completo 
-                                    FROM usuarios WHERE ID_rol = 3 AND estado = 'Activo'";
-                            $result = $conn->query($sql);
-                            while ($row = $result->fetch_assoc()) {
-                                echo '<option value="'.$row['ID_usuarios'].'">'.$row['nombre_completo'].'</option>';
-                            }
-                            $conn->close();
+                            require_once __DIR__ . "/../../modelos/conexion.php";
+
+try {
+    $conn = Conexion::conectar();
+    $stmt = $conn->prepare("SELECT id_usuarios, CONCAT(nombres, ' ', apellidos) AS nombre_completo 
+                            FROM usuarios WHERE ID_rol = 3 AND estado = 'Activo'");
+    $stmt->execute();
+    $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($usuarios as $row) {
+        echo '<option value="' . $row['id_usuarios'] . '">' . $row['nombre_completo'] . '</option>';
+    }
+
+    $stmt->closeCursor();
+    $stmt = null;
+} catch (PDOException $e) {
+    echo '<option disabled>Error al cargar coevaluadores</option>';
+}
+
                             ?>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="updateEstado">Estado:</label>
-                        <select class="form-control" id="updateEstado" required>
+                        <select class="form-control" id="updateEstado" name="editEstado" required>
                             <option value="Activo">Activo</option>
                             <option value="Inactivo">Inactivo</option>
                         </select>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarCambios()">Guardar Cambios</button>
-            </div>
+                </div> 
+                 <!-- Script externo para cargar departamentos y ciudades -->
+                            <script src="/SAEPBETA/vistas/js/ciudades.js"></script>
+                <!-- FIN modal-body -->
+
+                <div class="modal-footer"> <!-- ✅ BOTONES DENTRO DEL FORM -->
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" name="editarEmpresa">Guardar Cambios</button>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-<script>
-let selectedRow = null;
 
-function selectRow(row) {
-    if (selectedRow) selectedRow.classList.remove('selected');
-    selectedRow = row;
-    row.classList.add('selected');
 
-    $('#modalIDUsuario').text(row.dataset.idusuario);
-    $('#modalNit').text(row.dataset.nit);
-    $('#modalNombre').text(row.dataset.nombre);
-    $('#modalDireccion').text(row.dataset.direccion);
-    $('#modalArea').text(row.dataset.area);
-    $('#modalTelefono').text(row.dataset.contacto);
-    $('#modalEmail').text(row.dataset.email);
-    $('#modalDepartamento').text(row.dataset.departamento);
-    $('#modalCiudad').text(row.dataset.ciudad);
-    $('#modalCoevaluador').text(row.dataset.coevaluador);
-    $('#modalEstado').text(row.dataset.estado);
-}
+</body>
+<script src="/SAEPBETA/vistas/js/empresas.js"></script>
+<script src="/SAEPBETA/vistas/js/empresas_modales.js"></script>
 
-$('#actualizarModal').on('show.bs.modal', function () {
-    if (!selectedRow) {
-        alert('Seleccione una empresa');
-        return false;
-    }
-
-    $('#updateNit').val(selectedRow.dataset.nit);
-    $('#updateNombre').val(selectedRow.dataset.nombre);
-    $('#updateTelefono').val(selectedRow.dataset.contacto);
-    $('#updateEmail').val(selectedRow.dataset.email);
-    $('#updateDireccion').val(selectedRow.dataset.direccion);
-    $('#updateDepartamento').val(selectedRow.dataset.departamento);
-    $('#updateCiudad').val(selectedRow.dataset.ciudad);
-    $('#updateArea').val(selectedRow.dataset.area);
-    $('#updateCoevaluador').val(selectedRow.dataset.idusuario); // OJO: usar ID aquí
-    $('#updateEstado').val(selectedRow.dataset.estado);
-});
-
-function guardarCambios() {
-    if (!selectedRow) return;
-    const cells = selectedRow.getElementsByTagName('td');
-    cells[1].textContent = $('#updateNombre').val();
-    cells[2].textContent = $('#updateTelefono').val();
-    cells[3].textContent = $('#updateCoevaluador').val();
-    cells[4].textContent = $('#updateEstado').val();
-    $('#actualizarModal').modal('hide');
-}
-
-function generarPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    doc.text('Reporte de Empresas', 105, 15, { align: 'center' });
-    const table = document.getElementById('empresaTable');
-    const rows = table.querySelectorAll('tbody tr');
-    const tableData = [];
-    rows.forEach(row => {
-        const cells = row.getElementsByTagName('td');
-        tableData.push([
-            cells[0].textContent,
-            cells[1].textContent,
-            cells[2].textContent,
-            cells[3].textContent,
-            cells[4].textContent
-        ]);
-    });
-    doc.autoTable({
-        head: [['NIT', 'Nombre', 'Teléfono', 'Coevaluador', 'Estado']],
-        body: tableData,
-        startY: 25
-    });
-    doc.save('reporte_empresas.pdf');
-}
-
-window.onload = function() {
-    const firstRow = document.querySelector('tbody tr');
-    if (firstRow) selectRow(firstRow);
-};
-</script>
 </body>
 </html>
